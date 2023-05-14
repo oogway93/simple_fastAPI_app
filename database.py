@@ -2,16 +2,16 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
+engine = create_engine("sqlite:///./sql_app.db")
 
-engine = create_engine("postgresql+psycopg2://postgres:12345@localhost/postgres", echo=True)
+session = sessionmaker(bind=engine, autoflush=False)
 
-session = sessionmaker(autoflush=False, bind=engine)
+Base = declarative_base()  # I used declarative method but you can another one.
 
-Base = declarative_base()
 
 def get_db():
-    db = session
+    db = session()
     try:
         yield db
     finally:
-        db.close_all()
+        db.close_all
